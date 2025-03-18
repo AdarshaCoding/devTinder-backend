@@ -1,26 +1,36 @@
 const express = require("express");
-const { userAuth, adminAuth } = require("./middleware/auth");
+const { connectDB } = require("./config/database");
+const { User } = require("./models/user");
 const PORT = 4000;
 const app = express();
 
-app.get("/user", userAuth, (req, res) => {
-  console.log("User get request from DB");
-  const user = {
-    name: "Adarsha",
-    age: "32",
+app.post("/signup", async (req, res) => {
+  // sample data, it can be the input from React App or Postman
+  const userObj = {
+    firstName: "Deepashree",
+    lastName: "PK",
+    emailId: "deepa@gmail.com",
+    password: "deepa@123",
+    age: 26,
+    gender: "Female",
   };
-  res.send(user);
-});
-app.use("/admin", adminAuth);
-
-app.get("/admin/getAllUsers", (req, res) => {
-  res.send("Take all users data");
-});
-
-app.delete("/admin/deleteUser", (req, res) => {
-  res.send("User is deleted!");
+  try {
+    const user = new User(userObj); // model constructor, creating the instance of it
+    await user.save(); // Saving the data to DB
+    res.send("User Added Succssfully!");
+  } catch (err) {
+    res.status(400).send("Something went wrong while adding the user to DB!");
+  }
 });
 
-app.listen(PORT, () => {
-  console.log("Sucessfully Server Started at Port#:", PORT);
-});
+//Always makesure DB is connected before listening to any incoming request
+connectDB()
+  .then(() => {
+    console.log("Database connected successfully!");
+    app.listen(PORT, () => {
+      console.log("The server is up and running at port#:", PORT);
+    });
+  })
+  .catch((err) => {
+    console.log("Something went wrong while connecting to DB!");
+  });
