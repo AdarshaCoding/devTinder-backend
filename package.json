@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
+    "dev-test":"nodemon src/test.js",
     "test": "jest"
   },
   "author": "Adarsha",
