@@ -9,7 +9,9 @@ const app = express();
  */
 
 //GET : http://localhost:5000/user
+//GET : http://localhost:5000/user?name="Adarsha"&city="Bengaluru"   ==> use req.query to retrieve the query params from the URL
 app.get("/user", (req, res) => {
+  console.log(req.query);
   userObj = {
     name: "Adarsha",
     city: "Bengaluru",
@@ -17,8 +19,17 @@ app.get("/user", (req, res) => {
   res.send(userObj);
 });
 
+//GET : http://localhost:5000/user/123/abc
+app.get("/user/:userId/:name", (req, res) => {
+  const { userId, postId } = req.params; // Access the parameters from req.params
+  res.send(`User ID: ${userId}, Post ID: ${postId}`);
+});
+
 //POST : http://localhost:5000/user
-// Now, if I execute POST method from postman, the below default route gets executed as we don't have "post" route handler
+
+app.post("/user", (req, res) => {
+  res.send("Added user to database!!");
+});
 
 app.use("/", (req, res) => {
   res.send("Home Page!!");
