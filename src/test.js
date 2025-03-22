@@ -1,40 +1,40 @@
 const express = require("express");
+const fs = require("node:fs");
 const PROT = 5000;
 
 const app = express();
 
-/**
- * app.use("path", request_handler) : This will handle all the HTTMP methods like GET, POST, PATCH, PUT, DELETE
- * if we have to handle independently then use respective HTTP methods
- */
+function getTimestamp() {
+  const now = new Date();
+  return `${now.toISOString()}`;
+}
 
-//GET : http://localhost:5000/user
-//GET : http://localhost:5000/user?name="Adarsha"&city="Bengaluru"   ==> use req.query to retrieve the query params from the URL
+function logMessage(message) {
+  const logDetails = `${getTimestamp()} - ${message}\n`;
+  return logDetails;
+}
+
 app.get("/user", (req, res) => {
-  console.log(req.query);
-  userObj = {
-    name: "Adarsha",
-    city: "Bengaluru",
-  };
-  res.send(userObj);
+  res.send("Hello User!");
 });
 
-//GET : http://localhost:5000/user/123/abc
-app.get("/user/:userId/:name", (req, res) => {
-  const { userId, postId } = req.params; // Access the parameters from req.params
-  res.send(`User ID: ${userId}, Post ID: ${postId}`);
+app.delete("/user", (req, res) => {
+  try {
+    const { emailId, phone } = req.query;
+    const message = `The deleted user details - ${emailId} - ${phone}`;
+    fs.appendFile("./userLogs.txt", logMessage(message), (err) => {
+      if (err) {
+        console.log("Error while updating the logs", err);
+        return;
+      }
+    });
+    res.send(
+      `User is deleted! \n The requested email id & phone: ${emailId} - ${phone}`
+    );
+  } catch (err) {
+    console.log(err);
+  }
 });
-
-//POST : http://localhost:5000/user
-
-app.post("/user", (req, res) => {
-  res.send("Added user to database!!");
-});
-
-app.use("/", (req, res) => {
-  res.send("Home Page!!");
-});
-
 app.listen(PROT, () => {
   console.log("Server is up and running!", PROT);
 });
