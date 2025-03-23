@@ -1,7 +1,9 @@
 const express = require("express");
+const { adminAuth } = require("./middleware/auth");
 const PROT = 5000;
 
 const app = express();
+app.use(express.json());
 
 /**
  * Middleware : the routes which helps (like authorization, field validations ...) to reach the route handler
@@ -13,28 +15,11 @@ const app = express();
  *     - app.get("/path", [rH1, rH2, rH3, rH4]) or app.get("/path", rH1, [rH2, rH3], rH4)
  */
 
-app.get(
-  "/user",
-  (req, res, next) => {
-    console.log("Middleware 1");
-    // res.send("Request Handler 1");
-    next();
-  },
-  (req, res, next) => {
-    console.log("Middleware 2");
-    //res.send("Request Handler 2");
-    next();
-  },
-  (req, res, next) => {
-    console.log("Middleware 3");
-    // res.send("Request Handler 3");
-    next();
-  },
-  (req, res) => {
-    console.log("Request Handler 4");
-    res.send("Request Handler 4");
-  }
-);
+app.get("/user", (req, res, next) => {
+  console.log("Middleware 1");
+  // res.send("Request Handler 1");
+  next();
+});
 
 /**
  * Middlewares can be chained like below also
@@ -42,24 +27,14 @@ app.get(
  *  even if it is in the middle of all "/admin" routes
  */
 
-app.get("/admin", (req, res, next) => {
-  console.log("Middleware 1");
-  next();
+// app.use(adminAuth);
+
+app.get("/admin/getUserDetails", adminAuth, (req, res) => {
+  res.send("User details!");
 });
 
-app.get("/admin/abc", (req, res) => {
-  console.log("Request handler, /admin/abc");
-  res.send("Request handler, /admin/abc");
-});
-
-app.get("/admin", (req, res, next) => {
-  console.log("Middleware 2");
-  next();
-});
-
-app.get("/admin", (req, res) => {
-  console.log("Admin: request handler");
-  res.send("Admin: request handler");
+app.delete("/admin/deleteUser", adminAuth, (req, res) => {
+  res.send("User deleted!");
 });
 
 app.listen(PROT, () => {

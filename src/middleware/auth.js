@@ -1,21 +1,12 @@
-const userAuth = (req, res, next) => {
-  const token = "xyz123";
-  const isUserAuthorized = token === "xyz123";
-  if (!isUserAuthorized) {
-    res.status(401).send("User is not authorized!");
-  } else {
-    next();
-  }
-};
-
 const adminAuth = (req, res, next) => {
-  const token = "xy123";
-  const isUserAuthorized = token === "xyz123";
-  if (!isUserAuthorized) {
-    res.status(401).send("Admin is not authorized!");
-  } else {
+  const data = req.body;
+  //   console.log(data.token);
+  const isAuthorized = data.token === "abc123";
+  if (isAuthorized) {
     next();
+  } else {
+    res.status(401).send("User Not Authorized!");
   }
 };
 
-module.exports = { userAuth, adminAuth };
+module.exports = { adminAuth };
