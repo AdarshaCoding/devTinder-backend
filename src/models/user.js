@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const validator = require("validator");
 //user schema, use camel casing - it is better always
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -19,10 +19,22 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     trim: true,
+    validate(value) {
+      if (!validator.isEmail(value)) {
+        throw new Error("Email ID is not valid!");
+      }
+    },
   },
   password: {
     type: String,
     required: true,
+    minLength: 8,
+    maxLength: 150,
+    validate(value) {
+      if (!validator.isStrongPassword(value)) {
+        throw new Error("The password is not strong!");
+      }
+    },
   },
   age: {
     type: Number,

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "dev-test":"nodemon src/test.js",
+    "dev-test": "nodemon src/test.js",
     "test": "jest"
   },
   "author": "Adarsha",
@@ -16,7 +16,9 @@
     "javascript"
   ],
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "express": "^4.21.2",
-    "mongoose": "^8.12.1"
+    "mongoose": "^8.12.1",
+    "validator": "^13.15.0"
   }
 }
