@@ -7,4 +7,21 @@ const validateSignupData = (req) => {
   //Email, password, age and gender have been handled in User model
 };
 
-module.exports = { validateSignupData };
+const validateProfileEditData = (req) => {
+  const allowedEditFields = [
+    "age",
+    "firstName",
+    "lastName",
+    "skills",
+    "photoUrl",
+    "about",
+    "gender",
+  ];
+
+  const isEditAllowed = Object.keys(req.body).every((field) =>
+    allowedEditFields.includes(field)
+  );
+  return isEditAllowed;
+};
+
+module.exports = { validateSignupData, validateProfileEditData };
