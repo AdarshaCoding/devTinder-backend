@@ -14,10 +14,11 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
 
+//routes
 app.use("/", authRotuer);
-app.use("/profile", profileRouter);
-app.use("/request", requestRouter);
-app.use("/user", userRouter);
+app.use("/", profileRouter);
+app.use("/", requestRouter);
+app.use("/", userRouter);
 
 //Always make sure DB is connected before listening to any incoming request
 connectDB()
